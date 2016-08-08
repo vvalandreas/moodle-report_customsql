@@ -219,4 +219,16 @@ class report_customsql_test extends advanced_testcase {
 
         return $DB->insert_record('report_customsql_queries', $report);
     }
+
+    public function test_pretify_column_names() {
+        $this->assertEquals(array('Frog id', 'name', 'Parent name'),
+                report_customsql_pretify_column_names(
+                        (object) array('frog_id' => 1, 'name' => 'Freddy', 'parent_name' => 'Frodo'),
+                        'SELECT name.id AS Frog_id,
+                                name.name,
+                                parent_name.name AS Parent_name
+                           FROM frog AS name,
+                                frog AS parent_name
+                          WHERE parent_name.id = name.parent_id'));
+    }
 }

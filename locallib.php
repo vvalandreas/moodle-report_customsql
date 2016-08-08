@@ -88,7 +88,7 @@ function report_customsql_generate_csv($report, $timenow) {
 
             if (!file_exists($csvfilename)) {
                 $handle = fopen($csvfilename, 'w');
-                report_customsql_start_csv($handle, $row, $report->singlerow);
+                report_customsql_start_csv($handle, $row, $report->singlerow, $report->querysql);
             } else {
                 $handle = fopen($csvfilename, 'a');
             }
@@ -353,9 +353,14 @@ function report_customsql_time_note($report, $tag) {
     return html_writer::tag($tag, $note, array('class' => 'admin_note'));
 }
 
-function report_customsql_pretify_column_names($row) {
+function report_customsql_pretify_column_names($row, $querytext) {
     $colnames = array();
     foreach (get_object_vars($row) as $colname => $ignored) {
+        // Try to re-get the col name from the original SQL, which may have
+        // upper-case letters, since that might look nicer.
+        if (preg_match_all('~\b(' . preg_quote($colname, '~') . ')\b\s*(,.*)?\bFROM\b~is', $querytext, $matches)) {
+            $colname = end($matches[1]);
+        }
         $colnames[] = str_replace('_', ' ', $colname);
     }
     return $colnames;
@@ -378,8 +383,8 @@ function report_customsql_write_csv_row($handle, $data) {
     fwrite($handle, implode(',', $escapeddata)."\r\n");
 }
 
-function report_customsql_start_csv($handle, $firstrow, $datecol) {
-    $colnames = report_customsql_pretify_column_names($firstrow);
+function report_customsql_start_csv($handle, $firstrow, $datecol, $querytext) {
+    $colnames = report_customsql_pretify_column_names($firstrow, $querysql);
     if ($datecol) {
         array_unshift($colnames, get_string('queryrundate', 'report_customsql'));
     }
