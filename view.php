@@ -174,6 +174,11 @@ if (is_null($csvtimestamp)) {
              html_writer::tag('a', get_string('downloadthisreportascsv', 'report_customsql'),
                               array('href' => new moodle_url(report_customsql_url('download.php'),
                               array('id' => $id, 'timestamp' => $csvtimestamp)))).
+             html_writer::end_tag('p').
+             html_writer::start_tag('p').
+             html_writer::tag('a', get_string('downloadthisreportasexcel', 'report_customsql'),
+             				  array('href' => new moodle_url(report_customsql_url('downloadexcel.php'),
+             				  array('id' => $id, 'timestamp' => $csvtimestamp)))).
              html_writer::end_tag('p');
 
         $archivetimes = report_customsql_get_archive_times($report);
