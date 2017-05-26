@@ -62,6 +62,7 @@ $string['displayname'] = 'Query name';
 $string['displaynamex'] = 'Query name: {$a}';
 $string['displaynamerequired'] = 'You must enter a query name';
 $string['downloadthisreportascsv'] = 'Download these results as CSV';
+$string['downloadthisreportasexcel'] = 'Download these results as Excel';
 $string['edit'] = 'Add/Edit';
 $string['editcategory'] = 'Update category';
 $string['editingareport'] = 'Editing an ad-hoc database query';
