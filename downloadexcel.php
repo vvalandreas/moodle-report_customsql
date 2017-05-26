@@ -50,6 +50,17 @@ if (!is_readable($csvfilename)) {
 $objReader = PHPExcel_IOFactory::createReader('CSV');
 $objPHPExcel = $objReader->load($csvfilename);
 
+// give sheet a sensible name
+$objPHPExcel->getActiveSheet()->setTitle(get_string('worksheettitle', 'report_customsql'));
+
+// automatically resize column widths - only do so on existing cells
+$sheet = $objPHPExcel->getActiveSheet();
+$cellIterator = $sheet->getRowIterator()->current()->getCellIterator();
+$cellIterator->setIterateOnlyExistingCells(true);
+foreach ($cellIterator as $cell) {
+	$sheet->getColumnDimension($cell->getColumn())->setAutoSize(true);
+}
+
 $filename = 'results';
 
 header("Pragma: public");
